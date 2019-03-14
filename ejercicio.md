@@ -1,7 +1,8 @@
---Para el procesamiento de nubes de puntos el uso de bases de datos espaciales, es una herrmienta útil ya que 
---ayuda a organizar la información de manera que sea posible agrupar por patches el numero de puntos necesarios para su indexación. Conserbando información como el numero de retorno para el caso de datos LIDAR o el valor Z
--- Para ello además vamos a usar PDAL una librería hecha en C++ para el manejo de nubes de puntos y la extension de Postgres pointcloud. 
 
+### Procesamiento de Nube de Puntos con pointcloud ###
+
+
+Para el procesamiento de nubes de puntos el uso de bases de datos espaciales, es una herrmienta útil ya que ayuda a organizar la información de manera que sea posible agrupar por patches el numero de puntos necesarios para su indexación. Conserbando información como el numero de retorno para el caso de datos LIDAR o el valor Z. Para ello además vamos a usar PDAL una librería hecha en C++ para el manejo de nubes de puntos y la extension de Postgres pointcloud. 
 
 Primero es necesario crear una base de datos con extension espacial, que ademas tenga las extensiones pgpointcloud y pointcloud_postgis
 
@@ -12,6 +13,7 @@ create extension pointcloud_postgis;
 -- Ahora vamos a cargar la nube de puntos en postgis, en la carpeta practica_nubesdepuntos encontraras un archivo con extensión .las
 -- y un archivo que se llama pipeline.txt, este archivo abrelo y encontraras lo siguiente: 
 
+```json
 {
   "pipeline":[
     {
@@ -32,6 +34,8 @@ create extension pointcloud_postgis;
     }
   ]
 }
+```
+
 
 --EJERCICIO 1: Investiga dentro de postgres qué es un patch en la extension pointcloud y las funciones disponibles
 --para su uso. 
@@ -47,6 +51,7 @@ Ahora desde la terminal copia y pega la siguiente linea de código:
 
 -- pc_get() Return values of all dimensions in an array
 
+```sql
 select e.*
 from
 (select pc_get(pc_explode(foo.pa), 'ReturnNumber') as return_number, 
@@ -58,3 +63,4 @@ from pcpatches p,
      (select * from edificios where id = 35) as e
 where pc_intersects(pa, st_buffer(e.geom, 2))) as foo) as e
 where  return_number = 1
+```
