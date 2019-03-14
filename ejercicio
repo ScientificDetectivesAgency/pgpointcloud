@@ -6,7 +6,7 @@
 Primero es necesario crear una base de datos con extension espacial, que ademas tenga las extensiones pgpointcloud y pointcloud_postgis
 
 create extension postgis;
-create extension pgpointcloud;
+create extension pointcloud;
 create extension pointcloud_postgis;
 
 -- Ahora vamos a cargar la nube de puntos en postgis, en la carpeta practica_nubesdepuntos encontraras un archivo con extensión .las
