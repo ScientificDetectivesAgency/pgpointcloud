@@ -199,32 +199,42 @@ Esto cargará en la tabla que se indica en el pipeline el archivo edificios.las 
 	```pc_intersects() Intersecta un objeto geométrico con un patch
 
 ```sql
-select e.*
+--(3) Ahora queremos obtene las variables enteriores solo donde el 'ReturnNumber' sea
+--igual a 1
+select foo.*
+--(2)De la subconsulta a vamos a tomar la información de los patches que corresponde a 
+--'ReturnNumber', el valor 'Z' y los pcpoints dentro del patch
 from
-(select pc_get(pc_explode(foo.pa), 'ReturnNumber') as return_number, 
-       pc_get(pc_explode(foo.pa), 'Z') as z,
-	   pc_explode(foo.pa) as exp
+(select pc_get(pc_explode(a.pa), 'ReturnNumber') as return_number, 
+       pc_get(pc_explode(a.pa), 'Z') as z,
+	   pc_explode(a.pa) as pcpoint
+
+--(1)En esta parte de la consulta seleccionamos toda la información de los patches 
+--que intersectan con el buffer de los edificios llamamos a la subconsulta "a"
 from
-(select p.*
-from pcpatches p, 
-     (select * from edificios where id = 35) as e
-where pc_intersects(pa, st_buffer(e.geom, 2))) as foo) as e
+(select p.* from pcpatches p, (select * from edificios where id = 35) as e
+ where pc_intersects(pa, st_buffer(e.geom, 2))) as a) as foo
 where  return_number = 1
 ```
 
 ```sql
-select min(z), max(z), id_ed, max(z)-min(z) as alt, avg(z)-min(z) as avg_alt
+--(4)Calculamos las alturas mínima y máxima, la diferencias entre ambas y un último campo
+--que calcula la diferencia entre la altura promedio y la altura mínima o de la base
+select id_ed, min(z), max(z), max(z)-min(z) as alt, avg(z)-min(z) as avg_alt
 from
+--(3)Seleccionamos todos los campos
 (select e.*
 from
+--(2)llamamos los mismo campos que en la consulta anterior
 (select foo.id_ed, pc_get(pc_explode(foo.pa), 'ReturnNumber') as return_number, 
        pc_get(pc_explode(foo.pa), 'Z') as z,
-	   pc_explode(foo.pa) as exp
+	   pc_explode(foo.pa) as pcpoints
 from
+--(1)Hacemos lo mismo que en la consulta anterior pero ahora de la tabla completa de edificios
 (select e.id as id_ed, p.*
 from pcpatches p, edificios  e
-where pc_intersects(pa, st_buffer(e.geom, 1))) as foo) as e
-where  return_number = 1) as p
+where pc_intersects(pa, st_buffer(e.geom, 2))) as foo) as e
+where  return_number = 1) as foo
 group by id_ed;
 ```
 
