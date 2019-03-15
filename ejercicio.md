@@ -221,16 +221,18 @@ where  return_number = 1
 --(4)Calculamos las alturas mínima y máxima, la diferencias entre ambas y un último campo
 --que calcula la diferencia entre la altura promedio y la altura mínima o de la base
 select id_ed, min(z), max(z), max(z)-min(z) as alt, avg(z)-min(z) as avg_alt
-from
 --(3)Seleccionamos todos los campos
-(select e.*
 from
+(select e.*
+
 --(2)llamamos los mismo campos que en la consulta anterior
+from
 (select foo.id_ed, pc_get(pc_explode(foo.pa), 'ReturnNumber') as return_number, 
        pc_get(pc_explode(foo.pa), 'Z') as z,
 	   pc_explode(foo.pa) as pcpoints
-from
+
 --(1)Hacemos lo mismo que en la consulta anterior pero ahora de la tabla completa de edificios
+from
 (select e.id as id_ed, p.*
 from pcpatches p, edificios  e
 where pc_intersects(pa, st_buffer(e.geom, 2))) as foo) as e
