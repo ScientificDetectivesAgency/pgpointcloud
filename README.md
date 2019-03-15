@@ -248,4 +248,4 @@ group by id_ed;
 1. Investiga qué es un PcPoint y un PcPatch y cualés son las funciones disponibles en pointcloud PostgreSQL para el uso de cada uno de ellos. 
 2. ¿Qué es un pdal pipeline y para qué sirve?
 Puedes consultar a la documentación en la siguiente liga: https://github/pgpointcloud/pointcloud
-3. Propon una problema de estudio que se pueda resolver con el almacenamiento de nubes de puntos en bases de datos y cómo lo resolverías.
+3. Propon un caso de estudio que se pueda resolver con el almacenamiento de nubes de puntos en bases de datos y cómo lo resolverías.
