@@ -169,7 +169,7 @@ Ahora vamos a cargar la nube de puntos en la base de datos, en la carpeta con lo
     {
       "type":"readers.las",
       "filename":"edificios.las", <-- nombre del archivo que se va a cargar en la base de datos
-      "spatialreference":"EPSG:32614" "": "<--- Sistema de referencia de origen del archivo .las"
+      "spatialreference":"EPSG:32614" <--- Sistema de referencia de origen del archivo .las
     },
     {
       "type":"filters.chipper",
