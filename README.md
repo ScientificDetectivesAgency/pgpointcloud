@@ -152,11 +152,9 @@ El siguiente es un ejemplo de un schema usado por PDAL:
 
 Para este ejercicio vamos a crear una base de datos, cargar una nube de puntos de una zona de la Ciudad de México y calcularemos las alturas promedio de los edificios en esa área, así como visualizar los resultados.
 
-En este link puedes descargar los datos con los que vas a trabajar
+:shipit: En este link puedes descargar los datos con los que vas a trabajar
 https://github.com/ScientificDetectivesAgency/pgpointcloud/raw/master/practica_nubesdepuntos.zip
 
-<a href="https://github.com/ScientificDetectivesAgency/pgpointcloud/raw/master/practica_nubesdepuntos.zip
-"><img src="https://cdn3.iconfinder.com/data/icons/delivery-and-logistics-1/24/logistics-24-512.png></a>
 
 Primero es necesario crear una base de datos con extension espacial, que ademas tenga las extensiones pointcloud y pointcloud_postgis
 
@@ -249,7 +247,7 @@ where  return_number = 1) as foo
 group by id_ed;
 ```
 
-**EJERCICIO 1:** Contesta lo siguiente: 
+:shipit: **EJERCICIO 1:** Contesta lo siguiente: 
 
 1. Investiga qué es un PcPoint y un PcPatch y cuáles son las funciones disponibles en pointcloud PostgreSQL para el uso de cada uno de ellos. 
 2. ¿Qué es un pdal pipeline y para qué sirve?
