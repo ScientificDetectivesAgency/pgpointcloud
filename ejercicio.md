@@ -194,9 +194,9 @@ Ahora desde la terminal copia y pega la siguiente linea de código:
 
 Esto cargará en la tabla que se indica en el pipeline el archivo edificios.las y creará el esquema de las variables. También carga el archivo edificios.shp
 
-```pc_get() Regresa los valores en todas las dimensiones de un array```
-```pc_explode() Convierte el Patch en un set de varios puntos y permite consultar la infomación asociada a las variables almacenada en ellos.```
-```pc_intersects() Intersecta un objeto geométrico con un patch
+	```pc_get() Regresa los valores en todas las dimensiones de un array```
+	```pc_explode() Convierte el Patch en un set de varios puntos y permite consultar la infomación asociada a las 		           variables almacenada en ellos.```	
+	```pc_intersects() Intersecta un objeto geométrico con un patch
 
 ```sql
 select e.*
@@ -233,7 +233,7 @@ group by id_ed;
 1. Investiga qué es un PcPoint y un PcPatch y cualés son las funciones disponibles en pointcloud PostgreSQL para el uso de cada uno de ellos. 
 2. ¿Qué es un pdal pipeline y para qué sirve?
 Puedes consultar a la documentación en la siguiente liga: https://github/pgpointcloud/pointcloud
-3. Propon una problema de estudio que se pueda resolver con el almacenamiento de nubes de puntos en bases de datos. Y como lo resolverías.
+3. Propon una problema de estudio que se pueda resolver con el almacenamiento de nubes de puntos en bases de datos y cómo lo resolverías.
 
 
 
