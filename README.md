@@ -198,6 +198,8 @@ Esto cargará en la tabla que se indica en el pipeline el archivo edificios.las 
 	```pc_explode() Convierte el Patch en un set de varios puntos y permite consultar la infomación asociada a las 		           variables almacenada en ellos.```	
 	```pc_intersects() Intersecta un objeto geométrico con un patch
 
+Primero vamos a familiarizarnos con las funciones que vamos a utilizar y las consultas que se pueden hacer
+
 ```sql
 --(3) Ahora queremos obtene las variables enteriores solo donde el 'ReturnNumber' sea
 --igual a 1
@@ -216,6 +218,7 @@ from
  where pc_intersects(pa, st_buffer(e.geom, 2))) as a) as foo
 where  return_number = 1
 ```
+Ahora calcularemos las alturas
 
 ```sql
 --(4)Calculamos las alturas mínima y máxima, la diferencias entre ambas y un último campo
