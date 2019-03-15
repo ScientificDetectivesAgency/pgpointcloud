@@ -152,6 +152,9 @@ El siguiente es un ejemplo de un schema usado por PDAL:
 
 Para este ejercicio vamos a crear una base de datos, cargar una nube de puntos de una zona de la Ciudad de México y calcularemos las alturas promedio de los edificios en esa área, así como visualizar los resultados.
 
+En este link puedes descargar los datos con los que vas a trabajar
+https://github.com/ScientificDetectivesAgency/pgpointcloud/blob/master/practica_nubesdepuntos.zip
+
 Primero es necesario crear una base de datos con extension espacial, que ademas tenga las extensiones pointcloud y pointcloud_postgis
 
 ```sql
