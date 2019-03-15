@@ -155,6 +155,9 @@ Para este ejercicio vamos a crear una base de datos, cargar una nube de puntos d
 En este link puedes descargar los datos con los que vas a trabajar
 https://github.com/ScientificDetectivesAgency/pgpointcloud/raw/master/practica_nubesdepuntos.zip
 
+<a href="https://github.com/ScientificDetectivesAgency/pgpointcloud/raw/master/practica_nubesdepuntos.zip
+"><img src="https://cdn3.iconfinder.com/data/icons/delivery-and-logistics-1/24/logistics-24-512.png></a>
+
 Primero es necesario crear una base de datos con extension espacial, que ademas tenga las extensiones pointcloud y pointcloud_postgis
 
 ```sql
