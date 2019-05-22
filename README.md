@@ -256,3 +256,4 @@ group by id_ed;
 
 Instalación de pointcloud
 https://www.bostongis.com/PrinterFriendly.aspx?content_name=postgis_tut01
+https://www.enterprisedb.com/es/docs/en/9.3/pginstguide/PostgreSQL_Installation_Guide-08.htm
