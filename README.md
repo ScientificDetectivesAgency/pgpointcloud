@@ -253,3 +253,6 @@ group by id_ed;
 2. ¿Qué es un pdal pipeline y para qué sirve?
 	Puedes consultar a la documentación en la siguiente liga: https://github/pgpointcloud/pointcloud
 3. Propón un caso de estudio que se pueda resolver con el almacenamiento de nubes de puntos en bases de datos y cómo lo resolverías.
+
+Instalación de pointcloud
+https://www.bostongis.com/PrinterFriendly.aspx?content_name=postgis_tut01
