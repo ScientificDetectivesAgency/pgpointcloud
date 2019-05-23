@@ -7,7 +7,7 @@ Los sensores LIDAR producen rápidamente millones de puntos con un gran número 
 
 Para lidiar con esta heterogeneidad en los datos PostgreSQL Pointcloud utiliza un documento llamado ``esquema`` que contiene los atributos de cada variable para describir el contenido de cualquier punto LIDAR en particular. Cada punto contiene una serie de dimensiones, y cada dimensión puede ser de cualquier tipo de datos, con escalas. El formato de documento de esquema utilizado por PostgreSQL Pointcloud es el mismo que utiliza la biblioteca ``PDAL``, lo que permite cargar los datos de la nube de puntos desde esta biblioteca a PostgreSQL.
 
-El siguiente es un ejemplo de un schema usado por PDAL: 
+El siguiente es un ejemplo de un schema generado por PDAL al cargar la nube de puntos a la base de datos: 
 
 ```json 
 "<?xml version="1.0" encoding="UTF-8"?>
@@ -156,7 +156,7 @@ En este link puedes descargar los datos con los que vas a trabajar
 https://github.com/ScientificDetectivesAgency/pgpointcloud/raw/master/practica_nubesdepuntos.zip
 
 
-Primero es necesario crear una base de datos con extension espacial, que ademas tenga las extensiones pointcloud y pointcloud_postgis
+Primero es necesario crear una base de datos con las extensiones pointcloud y pointcloud_postgis desde PgAdmin4:
 
 ```sql
 create extension postgis;
@@ -164,7 +164,7 @@ create extension pointcloud;
 create extension pointcloud_postgis;
 ```
 
-Ahora vamos a cargar la nube de puntos en la base de datos, en la carpeta con los archivos necesarios disponible en este repositorio, encontraras los archivos ``edificios.las`` (datos LIDAR) y pipeline.json. Si abres este archivo se vera así:
+Para cargar la nube de puntos en la base de datos vamos a usar un pipeline donde le indiquemos los argumentos necesarios para conectarnos al DBMS y al servidor. Dentro de la carpeta de trabajo encontrán los archivos ``edificios.las`` (datos LIDAR) y el pipeline.json, abranlo y vamos a modificar los parametros como se indíca abajo:
 
 
 ```json
@@ -189,14 +189,12 @@ Ahora vamos a cargar la nube de puntos en la base de datos, en la carpeta con lo
   ]
 }
 ```
-**Cambia los parametros donde sea necesario**
 
-
-Ahora desde la terminal copia y pega la siguiente linea de código:
+Ahora en Anaconda Promt copia y pega la siguiente linea de código, para comenzar a subir los datos:
  
-        pdal pipeline --input pipeline.json
+        pdal pipeline --input pipeline.json --debug 
 
-Esto cargará en la tabla que se indica en el pipeline el archivo edificios.las y creará el esquema de las variables. También carga el archivo edificios.shp
+Esto cargará en la tabla con el nombre que le indicaste en el pipeline, desde el archivo edificios.las y creará el esquema correspondiente. Simultaneamente abre Qgis y carga el archivo edificios.shp
 
 	```pc_get() Regresa los valores en todas las dimensiones de un array```
 	```pc_explode() Convierte el Patch en un set de varios puntos y permite consultar la infomación asociada a las 		           variables almacenada en ellos.```	
@@ -218,33 +216,41 @@ from
 --(1)En esta parte de la consulta seleccionamos toda la información de los patches 
 --que intersectan con el buffer de los edificios llamamos a la subconsulta "a"
 from
-(select p.* from pcpatches p, (select * from edificios where id = 35) as e
+(select p.* from edificio p, (select * from edificios where id = 35) as e
  where pc_intersects(pa, st_buffer(e.geom, 2))) as a) as foo
 where  return_number = 1
 ```
 Ahora calcularemos las alturas
 
 ```sql
+--- (5) Creamos las tablas con alturas y geometrías para visualizarla 
+Create table alturas_edificios as 
 --(4)Calculamos las alturas mínima y máxima, la diferencias entre ambas y un último campo
 --que calcula la diferencia entre la altura promedio y la altura mínima o de la base
-select id_ed, min(z), max(z), max(z)-min(z) as alt, avg(z)-min(z) as avg_alt
---(3)Seleccionamos todos los campos
+select 
+b.id_ed,	b.geom, b.alt, b.alt_k as alt_calc,
+a.min as alt_minimia, a.max as  alt_maxima, 
+a.alt as diferencia_alturas, a.avg_alt as alt_promedio
 from
+(select id_ed, min(z), max(z), max(z)-min(z) as alt, avg(z)-min(z) as avg_alt
+from
+--(3)Seleccionamos todos los campos
 (select e.*
-
 --(2)llamamos los mismo campos que en la consulta anterior
 from
 (select foo.id_ed, pc_get(pc_explode(foo.pa), 'ReturnNumber') as return_number, 
        pc_get(pc_explode(foo.pa), 'Z') as z,
 	   pc_explode(foo.pa) as pcpoints
 
---(1)Hacemos lo mismo que en la consulta anterior pero ahora de la tabla completa de edificios
+	   --(1)Hacemos lo mismo que en la consulta anterior pero ahora de la tabla completa de edificios	   
 from
 (select e.id as id_ed, p.*
-from pcpatches p, edificios  e
+from edificio p, edificios  e
 where pc_intersects(pa, st_buffer(e.geom, 2))) as foo) as e
 where  return_number = 1) as foo
-group by id_ed;
+group by id_ed) as a
+join edificios b
+on  a.id_ed = b.id
 ```
 
 **EJERCICIO 1:** Contesta lo siguiente: 
