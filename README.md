@@ -150,7 +150,7 @@ El siguiente es un ejemplo de un schema generado por PDAL al cargar la nube de p
 ```
 
 
-Para este ejercicio vamos a crear una base de datos, cargar una nube de puntos de una zona de la Ciudad de México y calcularemos las alturas promedio de los edificios en esa área, así como visualizar los resultados.
+Para este ejercicio vamos a crear una base de datos, cargar una nube de puntos de una zona de la Ciudad de México, calcularemos las alturas promedio de los edificios en esa área y el numero aproximado de pisos por edificio. Además visualizaremos los resultados en qgis
 
 En este [Link](https://github.com/ScientificDetectivesAgency/pgpointcloud/raw/master/practica_nubesdepuntos.zip) puedes descargar los datos con los que vas a trabajar.
 
@@ -175,7 +175,7 @@ Para cargar la nube de puntos en la base de datos vamos a usar un pipeline donde
       "spatialreference":"EPSG:32614" <--- Sistema de referencia de origen del archivo .las
     },
     {
-      "type":"filters.chipper",
+      "type":"filters.chipper", <-- Aquí se forman los Patches que en PDAL se llaman Chips
       "capacity":1500
     },
     {
@@ -195,11 +195,20 @@ Ahora en Anaconda Promt copia y pega la siguiente linea de código, para comenza
 
 Esto cargará en la tabla con el nombre que le indicaste en el pipeline, desde el archivo edificios.las y creará el esquema correspondiente. Simultaneamente abre Qgis y carga el archivo edificios.shp
 
+Estas son algunas de las funciones con las que podemos trabajar:
+
 	```pc_get() Regresa los valores en todas las dimensiones de un array```
 	```pc_explode() Convierte el Patch en un set de varios puntos y permite consultar la infomación asociada a las 		           variables almacenada en ellos.```	
 	```pc_intersects() Intersecta un objeto geométrico con un patch
 
-Primero vamos a familiarizarnos con las funciones que vamos a utilizar y las consultas que se pueden hacer
+Vamos a explorar los PcPoints y la forma de representarlos como una capa vectorial: 
+
+```sql
+SELECT PC_Explode(pa)::geometry as geom, id
+FROM edificio 
+```
+
+Ahora vamos a familiarizarnos con las funciones que vamos a utilizar y las consultas que se pueden hacer
 
 ```sql
 --(3) Ahora queremos obtene las variables enteriores solo donde el 'ReturnNumber' sea
@@ -219,7 +228,9 @@ from
  where pc_intersects(pa, st_buffer(e.geom, 2))) as a) as foo
 where  return_number = 1
 ```
+
 Ahora calcularemos las alturas
+
 
 ```sql
 --- (5) Creamos las tablas con alturas y geometrías para visualizarla 
@@ -257,8 +268,7 @@ Ya que tenemos las alturas podemos calcular el número de pisos aproximado:
 alter table alturas_edificios add column num_pisos int; 
 update alturas_edificios set num_pisos = alt_promedio/2.5
 ```
-
-ANEXO: 
+Ya que calculamos el numero de pisos, vamos a visualizarlos de acuerdo a su altura en Qgis.
 
 Tutoriales de Instalación 
 https://www.bostongis.com/PrinterFriendly.aspx?content_name=postgis_tut01
