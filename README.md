@@ -251,14 +251,15 @@ group by id_ed) as a
 join edificios b
 on  a.id_ed = b.id
 ```
+Ya que tenemos las alturas podemos calcular el número de pisos aproximado:
 
-**EJERCICIO 1:** Contesta lo siguiente: 
+```sql
+alter table alturas_edificios add column num_pisos int; 
+update alturas_edificios set num_pisos = alt_promedio/2.5
+```
 
-1. Investiga qué es un PcPoint y un PcPatch y cuáles son las funciones disponibles en pointcloud PostgreSQL para el uso de cada uno de ellos. 
-2. ¿Qué es un pdal pipeline y para qué sirve?
-	Puedes consultar a la documentación en la siguiente liga: https://github/pgpointcloud/pointcloud
-3. Propón un caso de estudio que se pueda resolver con el almacenamiento de nubes de puntos en bases de datos y cómo lo resolverías.
+ANEXO: 
 
-Instalación de pointcloud
+Tutoriales de Instalación 
 https://www.bostongis.com/PrinterFriendly.aspx?content_name=postgis_tut01
 https://www.enterprisedb.com/es/docs/en/9.3/pginstguide/PostgreSQL_Installation_Guide-08.htm
